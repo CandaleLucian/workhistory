@@ -1,12 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-</head>
-<body>
-    <h1>Hello World</h1>
-    <p>This is a template</p>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}
+    Home
+{% endblock %}
+
+
+{% block content %}
+    <h1>Hello World</h1>
+    {{ request.user }}
+    <p>This is a template</p>
+{% endblock %}
