@@ -1,9 +1,58 @@
-from django.shortcuts import render
+from django.http import Http404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Work
 from .forms import WorkForm, RawWorkForm
 
 
 # Create your views here.
+
+def work_list_view(request):
+    query_set = Work.objects.all() # list of objects
+    context = {
+        "object_list": query_set
+
+    }
+    return render(request, "work/work_list.html", context)
+
+
+def work_delete_view(request, id):
+    obj = get_object_or_404(Work, id=id)
+    # GET request
+    # obj.delete()
+    if request.method == "POST":
+        # confirming delete
+        obj.delete()
+        return redirect("../../")
+    context = {
+        "object": obj
+    }
+    return render(request, "work/work_delete.html", context)
+
+
+def dynamic_lookup_view(request, id):
+    # try:
+    #     obj = Work.objects.get(id=id)
+    # except Work.DoesNotExist:
+    #     raise Http404
+    obj = get_object_or_404(Work, id=id)
+    context = {
+        "object": obj
+    }
+    return render(request, "work/work_detail.html", context)
+
+
+def render_initial_data(request):
+    initial_data = {
+        "project": "This is my selected project",
+    }
+    obj = Work.objects.get(id=1)
+    form = WorkForm(request.POST or None, instance=obj)
+    if form.is_valid():
+        form.save()
+    context = {
+        'form': form
+    }
+    return render(request, "work/work_create.html", context)
 
 
 # def work_create_view(request):
