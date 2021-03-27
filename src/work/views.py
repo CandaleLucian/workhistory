@@ -5,14 +5,42 @@ from .forms import WorkForm, RawWorkForm
 
 
 # Create your views here.
+def work_create_view(request):
+    form = WorkForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        form = WorkForm()
+    context = {
+        'form': form
+    }
+    return render(request, "work/work_create.html", context)
+
+
+def work_update_view(request, id):
+    obj = get_object_or_404(Work, id=id)
+    form = WorkForm(request.POST or None, instance=obj)
+    if form.is_valid():
+        form.save()
+    context = {
+        'form': form
+    }
+    return render(request, "work/work_create.html", context)
+
 
 def work_list_view(request):
-    query_set = Work.objects.all() # list of objects
+    query_set = Work.objects.all()  # list of objects
     context = {
         "object_list": query_set
-
     }
     return render(request, "work/work_list.html", context)
+
+
+def work_detail_view(request, id):
+    obj = get_object_or_404(Work, id=id)
+    context = {
+        'object': obj
+    }
+    return render(request, "work/work_detail.html", context)
 
 
 def work_delete_view(request, id):
@@ -29,31 +57,16 @@ def work_delete_view(request, id):
     return render(request, "work/work_delete.html", context)
 
 
-def dynamic_lookup_view(request, id):
-    # try:
-    #     obj = Work.objects.get(id=id)
-    # except Work.DoesNotExist:
-    #     raise Http404
-    obj = get_object_or_404(Work, id=id)
-    context = {
-        "object": obj
-    }
-    return render(request, "work/work_detail.html", context)
-
-
-def render_initial_data(request):
-    initial_data = {
-        "project": "This is my selected project",
-    }
-    obj = Work.objects.get(id=1)
-    form = WorkForm(request.POST or None, instance=obj)
-    if form.is_valid():
-        form.save()
-    context = {
-        'form': form
-    }
-    return render(request, "work/work_create.html", context)
-
+# def dynamic_lookup_view(request, id):
+#     # try:
+#     #     obj = Work.objects.get(id=id)
+#     # except Work.DoesNotExist:
+#     #     raise Http404
+#     obj = get_object_or_404(Work, id=id)
+#     context = {
+#         "object": obj
+#     }
+#     return render(request, "work/work_detail.html", context)
 
 # def work_create_view(request):
 #     my_form = RawWorkForm()
@@ -80,29 +93,3 @@ def render_initial_data(request):
 #
 #     context = {}
 #     return render(request, "work/work_create.html", context)
-
-
-def work_create_view(request):
-    form = WorkForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        form = WorkForm()
-
-    context = {
-        'form': form
-    }
-    return render(request, "work/work_create.html", context)
-
-
-def work_detail_view(request):
-    obj = Work.objects.get(id=1)
-    # context = {
-    #     'project': obj.project,
-    #     'hours': obj.hours,
-    #     'work_descriptions': obj.work_descriptions,
-    #     'date': obj.date,
-    # }
-    context = {
-        'object': obj
-    }
-    return render(request, "work/work_detail.html", context)
