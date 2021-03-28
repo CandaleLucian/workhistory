@@ -20,6 +20,7 @@ from pages.views import home_view, contact_view, about_view, social_view
 
 urlpatterns = [
     path('works/', include('work.urls')),
+    path('sale_orders/', include('sale_order.urls')),
 
     path('', home_view, name='home'),
     path('contact/', contact_view),

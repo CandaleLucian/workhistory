@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'work',
     'pages',
+    'sale_order',
 ]
 
 MIDDLEWARE = [
